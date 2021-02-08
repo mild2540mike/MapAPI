@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_TTKNVl9u2U2LXhKC5QyUrxUg4TsWzvA&callback=initMap" async defer></script>
+
+	<script>
+		function initMap() {
+			var korat = {
+				lat: 14.97,
+				lng: 102.09
+			};
+			var map = new google.maps.Map(document.getElementById('map'), {
+				center: korat,
+				scrollwheel: false,
+				zoom: 15,
+				mapTypeId: google.maps.MapTypeId.HYBRID
+			});
+
+			map.addListener('click', function(e) {
+				var marker = new google.maps.Marker({
+					position: e.latLng,
+					map: map,
+					draggable: true,
+					title: "สวัสดีจ้า"
+				}); //close marker	
+
+				var info = new google.maps.InfoWindow({
+					content: "<div style='font-size:2em;'>บ้านของกวาง</div>"
+				});
+
+				google.maps.event.addListener(marker, 'click', function() {
+					info.open(map, marker);
+
+				});
+
+
+
+				google.maps.event.addListener(marker, 'dragend', function() {
+
+					var lat = marker.getPosition().lat();
+					var lng = marker.getPosition().lng();
+
+					alert(lat + " " + lng);
+					var cityCircle = new google.maps.Circle({
+						strokeColor: '#FF0000',
+						strokeOpacity: 0.8,
+						strokeWeight: 2,
+						fillColor: '#FF0000',
+						fillOpacity: 0.35,
+						map: map,
+						center: {
+							lat,
+							lng
+						},
+						radius: Math.sqrt(10) * 100,
+						draggable: true
+					});
+				}); //close addListener		
+				document.getElementById("lat").value = e.latLng.lat();
+				document.getElementById("lng").value = e.latLng.lng();
+			});
+
+
+		} //close initMap
+	</script>
+</head>
+
+<body>
+	<div id="map" style="border: 1px solid red;width: 500px;height: 500px;"></div>
+	lat:<input type="text" id="lat" /><br>
+	long:<input type="text" id="lng" />
+</body>
+
+</html>
